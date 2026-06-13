@@ -105,6 +105,20 @@ export interface Familiar {
   updated_at: string
 }
 
+export interface ArchivoPaciente {
+  id: string
+  paciente_id: string
+  clinica_id: string
+  subido_por: string
+  nombre: string
+  tipo: string
+  url: string
+  tamano_bytes?: number
+  descripcion?: string
+  created_at: string
+  updated_at: string
+}
+
 export interface Cita {
   id: string
   clinica_id: string
