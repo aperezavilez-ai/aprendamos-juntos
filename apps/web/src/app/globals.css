@@ -1,0 +1,273 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 99 102 241;
+    --color-secondary: 139 92 246;
+    --radius-card: 16px;
+    --radius-btn: 10px;
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  }
+
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply text-neutral-900 bg-neutral-50;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Scrollbar personalizado */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400;
+  }
+
+  /* Focus ring accesible */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+}
+
+@layer components {
+  /* ===== CARDS ===== */
+  .card {
+    @apply bg-white rounded-2xl border border-neutral-200/80 shadow-card;
+  }
+  .card-hover {
+    @apply card transition-shadow duration-200 hover:shadow-card-hover;
+  }
+
+  /* ===== BOTONES ===== */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-[10px] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 active:scale-[0.98] shadow-sm;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-50 active:scale-[0.98] shadow-sm;
+  }
+  .btn-ghost {
+    @apply btn text-neutral-600 hover:bg-neutral-100 active:scale-[0.98];
+  }
+  .btn-danger {
+    @apply btn bg-danger-600 text-white hover:bg-danger-700 active:scale-[0.98];
+  }
+  .btn-success {
+    @apply btn bg-success-600 text-white hover:bg-success-700 active:scale-[0.98];
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+  .btn-icon {
+    @apply btn p-2.5;
+  }
+
+  /* ===== INPUTS ===== */
+  .input {
+    @apply w-full px-3.5 py-2.5 text-sm bg-white border border-neutral-200 rounded-[10px] text-neutral-900 placeholder-neutral-400 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  .input-error {
+    @apply input border-danger-400 focus:ring-danger-500;
+  }
+  .label {
+    @apply block text-sm font-medium text-neutral-700 mb-1.5;
+  }
+  .field-error {
+    @apply text-xs text-danger-600 mt-1;
+  }
+
+  /* ===== BADGES ===== */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-primary {
+    @apply badge bg-primary-100 text-primary-700;
+  }
+  .badge-success {
+    @apply badge bg-success-100 text-success-700;
+  }
+  .badge-warning {
+    @apply badge bg-warning-100 text-warning-700;
+  }
+  .badge-danger {
+    @apply badge bg-danger-100 text-danger-700;
+  }
+  .badge-neutral {
+    @apply badge bg-neutral-100 text-neutral-600;
+  }
+
+  /* ===== STAT CARDS ===== */
+  .stat-card {
+    @apply card p-5 flex flex-col gap-1;
+  }
+  .stat-label {
+    @apply text-xs font-medium text-neutral-500 uppercase tracking-wide;
+  }
+  .stat-value {
+    @apply text-2xl font-semibold text-neutral-900;
+  }
+  .stat-change {
+    @apply text-xs font-medium;
+  }
+  .stat-change-up {
+    @apply stat-change text-success-600;
+  }
+  .stat-change-down {
+    @apply stat-change text-danger-600;
+  }
+
+  /* ===== TABLA ===== */
+  .table-wrapper {
+    @apply w-full overflow-x-auto;
+  }
+  .table {
+    @apply w-full text-sm;
+  }
+  .table th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide bg-neutral-50 border-b border-neutral-200;
+  }
+  .table td {
+    @apply px-4 py-3.5 text-neutral-700 border-b border-neutral-100;
+  }
+  .table tr:hover td {
+    @apply bg-neutral-50;
+  }
+  .table tr:last-child td {
+    @apply border-b-0;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 transition-all duration-150 cursor-pointer;
+  }
+  .sidebar-item-active {
+    @apply sidebar-item bg-primary-50 text-primary-700 hover:bg-primary-100 hover:text-primary-800;
+  }
+
+  /* ===== AVATAR ===== */
+  .avatar {
+    @apply flex items-center justify-center rounded-full font-semibold text-white bg-primary-500 shrink-0;
+  }
+  .avatar-xs { @apply avatar w-6 h-6 text-2xs; }
+  .avatar-sm { @apply avatar w-8 h-8 text-xs; }
+  .avatar-md { @apply avatar w-10 h-10 text-sm; }
+  .avatar-lg { @apply avatar w-12 h-12 text-base; }
+  .avatar-xl { @apply avatar w-16 h-16 text-xl; }
+
+  /* ===== SECCIONES DE PÁGINA ===== */
+  .page-header {
+    @apply flex items-center justify-between mb-6;
+  }
+  .page-title {
+    @apply text-xl font-semibold text-neutral-900;
+  }
+  .page-subtitle {
+    @apply text-sm text-neutral-500 mt-0.5;
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    @apply border-t border-neutral-200;
+  }
+  .divider-vertical {
+    @apply border-l border-neutral-200 h-full;
+  }
+
+  /* ===== LOADING SKELETON ===== */
+  .skeleton {
+    @apply bg-neutral-200 rounded-lg animate-pulse;
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    @apply w-full h-2 bg-neutral-200 rounded-full overflow-hidden;
+  }
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-500;
+  }
+
+  /* ===== CHIPS / TAGS ===== */
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 text-center;
+  }
+  .empty-state-icon {
+    @apply w-16 h-16 mx-auto mb-4 text-neutral-300;
+  }
+  .empty-state-title {
+    @apply text-base font-semibold text-neutral-700 mb-1;
+  }
+  .empty-state-desc {
+    @apply text-sm text-neutral-500;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm;
+  }
+}
+
+/* ===== ANIMACIONES DE CALENDARIO ===== */
+.rbc-calendar {
+  @apply font-sans text-sm;
+}
+.rbc-toolbar {
+  @apply mb-4 flex flex-wrap gap-2;
+}
+.rbc-toolbar button {
+  @apply btn-secondary btn-sm;
+}
+.rbc-toolbar button.rbc-active {
+  @apply bg-primary-600 text-white border-primary-600;
+}
+.rbc-event {
+  @apply bg-primary-500 border-primary-600 rounded-lg text-xs font-medium;
+}
+.rbc-today {
+  @apply bg-primary-50;
+}
+.rbc-header {
+  @apply text-xs font-semibold text-neutral-500 uppercase tracking-wide py-3;
+}
+.rbc-slot-wrapper {
+  @apply cursor-pointer;
+}
