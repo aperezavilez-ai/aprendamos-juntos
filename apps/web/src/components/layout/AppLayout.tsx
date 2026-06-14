@@ -140,7 +140,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 item.highlight && !isActive && 'text-secondary-600 hover:bg-secondary-50 hover:text-secondary-700'
               )}
             >
-              <item.icon className="w-4.5 h-4.5 shrink-0" />
+              <item.icon className="w-4 h-4 shrink-0" />
               <span>{item.label}</span>
               {item.highlight && (
                 <span className="ml-auto badge badge-primary text-2xs">IA</span>
@@ -164,7 +164,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   onClick={() => setSidebarOpen(false)}
                   className={isActive ? 'sidebar-item-active' : 'sidebar-item'}
                 >
-                  <item.icon className="w-4.5 h-4.5 shrink-0" />
+                  <item.icon className="w-4 h-4 shrink-0" />
                   <span>{item.label}</span>
                 </Link>
               )
