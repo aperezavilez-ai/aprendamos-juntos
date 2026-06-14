@@ -1,45 +1,30 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 const RUTAS_PUBLICAS = ['/auth/login', '/auth/nueva-contrasena', '/auth/registro', '/portal']
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
+export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
-  // Rutas de API: dejar pasar siempre
-  if (pathname.startsWith('/api/')) return res
+  // Rutas de API y assets: dejar pasar siempre
+  if (pathname.startsWith('/api/')) return NextResponse.next()
 
-  // Rutas públicas: dejar pasar sin verificar sesión
+  // Rutas públicas: dejar pasar siempre
   const esPublica = RUTAS_PUBLICAS.some(r => pathname.startsWith(r))
-  if (esPublica) return res
+  if (esPublica) return NextResponse.next()
 
-  // Si Supabase no está configurado correctamente, redirigir al login
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  if (!supabaseUrl || supabaseUrl.includes('placeholder')) {
-    return NextResponse.redirect(new URL('/auth/login', req.url))
+  // Verificar si existe una cookie de sesión de Supabase (sin llamadas externas)
+  const hasSbCookie = Array.from(req.cookies.getAll()).some(
+    c => c.name.startsWith('sb-') && c.name.endsWith('-auth-token')
+  )
+
+  if (!hasSbCookie) {
+    const loginUrl = new URL('/auth/login', req.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
-  try {
-    const supabase = createMiddlewareClient({ req, res })
-    const { data: { session } } = await supabase.auth.getSession()
-
-    if (!session) {
-      const loginUrl = new URL('/auth/login', req.url)
-      loginUrl.searchParams.set('redirect', pathname)
-      return NextResponse.redirect(loginUrl)
-    }
-
-    // Si tiene sesión y va a login, redirigir al dashboard
-    if (session && pathname === '/auth/login') {
-      return NextResponse.redirect(new URL('/dashboard', req.url))
-    }
-  } catch {
-    return NextResponse.redirect(new URL('/auth/login', req.url))
-  }
-
-  return res
+  return NextResponse.next()
 }
 
 export const config = {
