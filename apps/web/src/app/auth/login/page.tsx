@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
+import Logo from '@/components/brand/Logo'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -60,9 +61,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-white font-bold text-2xl">T</span>
-          </div>
+          <Logo iconSize="lg" showText={false} href={null} className="justify-center mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-neutral-900">Aprendamos Juntos</h1>
           <p className="text-neutral-500 text-sm mt-1">
             {modo === 'login' ? 'Inicia sesión en tu cuenta' : 'Restablece tu contraseña'}

@@ -26,6 +26,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 import type { Usuario } from '@/types'
+import Logo from '@/components/brand/Logo'
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: HomeIcon },
@@ -111,17 +112,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-neutral-100">
-        <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 bg-primary-600 rounded-xl flex items-center justify-center shadow-sm group-hover:bg-primary-700 transition-colors">
-            <span className="text-white font-bold text-xs">A</span>
-          </div>
-          <div>
-            <p className="font-semibold text-neutral-900 text-sm leading-none">Aprendamos Juntos</p>
-            <p className="text-2xs text-neutral-400 mt-0.5 leading-none truncate max-w-[130px]">
-              {clinicaNombre}
-            </p>
-          </div>
-        </Link>
+        <Logo href="/dashboard" subtitle={clinicaNombre} iconSize="sm" />
       </div>
 
       {/* Navegación principal */}
