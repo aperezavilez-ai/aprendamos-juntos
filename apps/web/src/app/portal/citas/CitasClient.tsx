@@ -13,6 +13,7 @@ import { format, isAfter, isBefore, addHours } from 'date-fns'
 import { es } from 'date-fns/locale'
 import toast from 'react-hot-toast'
 import { confirmarCitaAction } from '../actions'
+import PacienteAvatar from '@/components/portal/PacienteAvatar'
 
 type Props = {
   paciente: any
@@ -75,9 +76,7 @@ export default function CitasClient({ paciente, citas: initialCitas, sinPerfil }
     <div className="space-y-5">
       {paciente && (
         <div className="card p-4 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-primary-100 flex items-center justify-center text-xl font-bold text-primary-600 shrink-0">
-            {paciente.nombre[0]}
-          </div>
+          <PacienteAvatar paciente={paciente} size="sm" />
           <div>
             <p className="font-bold text-neutral-900">{paciente.nombre} {paciente.apellidos}</p>
             {(paciente.motivo_consulta || paciente.diagnosticos?.[0]) && (

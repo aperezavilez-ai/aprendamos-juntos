@@ -1,5 +1,7 @@
 'use client'
 
+import PacienteAvatar from '@/components/portal/PacienteAvatar'
+
 const RELACION_LABEL: Record<string, string> = {
   padre: 'Padre',
   madre: 'Madre',
@@ -10,11 +12,16 @@ const RELACION_LABEL: Record<string, string> = {
 type Props = {
   data: {
     usuario: { nombre: string; apellidos: string; email: string }
-    familiar?: { tipo_relacion: string; paciente?: { nombre: string; apellidos: string } }
+    familiar?: {
+      tipo_relacion: string
+      paciente?: { nombre: string; apellidos: string; foto_url?: string | null; motivo_consulta?: string }
+    }
   }
 }
 
 export default function PerfilClient({ data }: Props) {
+  const paciente = data.familiar?.paciente
+
   return (
     <div className="space-y-4">
       <div className="card p-5">
@@ -41,12 +48,20 @@ export default function PerfilClient({ data }: Props) {
         </dl>
       </div>
 
-      {data.familiar?.paciente && (
+      {paciente && (
         <div className="card p-5">
           <h2 className="text-sm font-bold text-neutral-800 mb-4">Paciente vinculado</h2>
-          <p className="font-semibold text-neutral-900">
-            {data.familiar.paciente.nombre} {data.familiar.paciente.apellidos}
-          </p>
+          <div className="flex items-center gap-4">
+            <PacienteAvatar paciente={paciente} size="lg" />
+            <div>
+              <p className="font-semibold text-neutral-900">
+                {paciente.nombre} {paciente.apellidos}
+              </p>
+              {paciente.motivo_consulta && (
+                <p className="text-xs text-neutral-500 mt-1">{paciente.motivo_consulta}</p>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

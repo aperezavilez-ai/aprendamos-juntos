@@ -107,6 +107,14 @@ async function main() {
   }
   console.log(`   Paciente: ${DEMO.pacienteNombre} ${DEMO.pacienteApellidos} (${pacienteId})`)
 
+  const fotoUrl =
+    'https://api.dicebear.com/7.x/big-ears/png?seed=SantiagoGarciaLopez&backgroundColor=b6e3f4&size=256'
+  await rest(`/pacientes?id=eq.${pacienteId}`, {
+    method: 'PATCH',
+    prefer: 'return=minimal',
+    body: JSON.stringify({ foto_url: fotoUrl }),
+  })
+
   console.log('5. Eliminando cuenta padre demo previa si existe...')
   const existingUsers = await adminFetch('/auth/v1/admin/users?page=1&per_page=1000')
   for (const u of existingUsers.users || []) {
@@ -207,24 +215,73 @@ async function main() {
   }
 
   console.log('10. Creando reporte demo compartido...')
-  const reporteBody = {
-    paciente_id: pacienteId,
-    clinica_id: clinicaId,
-    generado_por: terapeutaId,
-    tipo: 'mensual',
-    titulo: 'Reporte de progreso - Santiago',
-    contenido: `## Resumen del mes\n\nSantiago ha mostrado avances importantes en motricidad fina y regulación sensorial.\n\n### Avances\n- Mejoró el agarre del lápiz\n- Mayor tolerancia a texturas nuevas\n- Participa con más entusiasmo en las actividades\n\n### Recomendaciones para casa\n- Practicar enhebrado 10 minutos al día\n- Actividades con plastilina suave\n\n_Este reporte fue compartido por el terapeuta._`,
-    enviado_a_padres: true,
-  }
-  try {
-    await rest('/reportes_ia', { method: 'POST', prefer: 'return=minimal', body: JSON.stringify(reporteBody) })
-  } catch {
-    delete reporteBody.enviado_a_padres
-    await rest('/reportes_ia', { method: 'POST', prefer: 'return=minimal', body: JSON.stringify(reporteBody) })
-    console.log('   (columna enviado_a_padres no existe aún — ejecuta 002_portal_padres.sql)')
+  const reporteContenido = `## Resumen del mes\n\nSantiago ha mostrado avances importantes en motricidad fina y regulación sensorial.\n\n### Avances\n- Mejoró el agarre del lápiz\n- Mayor tolerancia a texturas nuevas\n- Participa con más entusiasmo en las actividades\n\n### Recomendaciones para casa\n- Practicar enhebrado 10 minutos al día\n- Actividades con plastilina suave\n\n_Este reporte fue compartido por el terapeuta._`
+  const reportesExistentes = await rest(`/reportes_ia?select=id&paciente_id=eq.${pacienteId}&limit=1`)
+  if (!reportesExistentes[0]) {
+    const reporteBody = {
+      paciente_id: pacienteId,
+      clinica_id: clinicaId,
+      generado_por: terapeutaId,
+      tipo: 'mensual',
+      titulo: 'Reporte de progreso - Santiago',
+      contenido: reporteContenido,
+      enviado_a_padres: true,
+    }
+    try {
+      await rest('/reportes_ia', { method: 'POST', prefer: 'return=minimal', body: JSON.stringify(reporteBody) })
+    } catch {
+      delete reporteBody.enviado_a_padres
+      await rest('/reportes_ia', { method: 'POST', prefer: 'return=minimal', body: JSON.stringify(reporteBody) })
+      console.log('   (columna enviado_a_padres no existe aún — ejecuta 002_portal_padres.sql)')
+    }
+  } else {
+    await rest(`/reportes_ia?paciente_id=eq.${pacienteId}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ enviado_a_padres: true }),
+    })
   }
 
-  console.log('11. Verificando login padre...')
+  console.log('11. Creando mensajes demo...')
+  const mensajesExistentes = await rest(`/chat_mensajes?select=id&paciente_id=eq.${pacienteId}&limit=1`)
+  if (!mensajesExistentes[0]) {
+    const hace2d = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+    const hace1d = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+    await rest('/chat_mensajes', {
+      method: 'POST',
+      prefer: 'return=minimal',
+      body: JSON.stringify([
+        {
+          clinica_id: clinicaId,
+          paciente_id: pacienteId,
+          remitente_id: terapeutaId,
+          tipo_remitente: 'terapeuta',
+          contenido: '¡Hola! Santiago tuvo una excelente sesión. Trabajamos pinza trípode con muy buena concentración.',
+          leido: true,
+          created_at: hace2d,
+        },
+        {
+          clinica_id: clinicaId,
+          paciente_id: pacienteId,
+          remitente_id: authUser.id,
+          tipo_remitente: 'padre',
+          contenido: '¡Gracias! En casa notamos que ya agarra mejor el crayón. ¿Qué podemos practicar esta semana?',
+          leido: true,
+          created_at: hace1d,
+        },
+        {
+          clinica_id: clinicaId,
+          paciente_id: pacienteId,
+          remitente_id: terapeutaId,
+          tipo_remitente: 'terapeuta',
+          contenido: 'Enhebrar cuentas grandes 10 min al día y plastilina suave. Les compartí el reporte mensual con más detalle.',
+          leido: false,
+        },
+      ]),
+    })
+  }
+
+  console.log('12. Verificando login padre...')
   const login = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
     method: 'POST',
     headers: { apikey: ANON_KEY, 'Content-Type': 'application/json' },
