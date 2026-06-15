@@ -9,7 +9,7 @@ function parseCookieHeader(header: string) {
     if (eq === -1) return { name: trimmed, value: '' }
     return {
       name: trimmed.slice(0, eq),
-      value: decodeURIComponent(trimmed.slice(eq + 1)),
+      value: trimmed.slice(eq + 1),
     }
   })
 }
