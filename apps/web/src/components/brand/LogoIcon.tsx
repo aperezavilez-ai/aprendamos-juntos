@@ -24,7 +24,8 @@ export default function LogoIcon({ size = 'sm', className }: LogoIconProps) {
       width={dims.width}
       height={dims.height}
       priority
-      className={clsx('shrink-0 object-contain', className)}
+      unoptimized
+      className={clsx('shrink-0 object-contain bg-transparent', className)}
       aria-hidden
     />
   )

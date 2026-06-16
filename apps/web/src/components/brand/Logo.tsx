@@ -3,6 +3,10 @@ import LogoIcon from './LogoIcon'
 import ColorfulBrandName from './ColorfulBrandName'
 import { clsx } from 'clsx'
 
+function isBrandSubtitle(text: string) {
+  return text.trim().toLowerCase() === 'aprendamos juntos'
+}
+
 interface LogoProps {
   subtitle?: string
   href?: string | null
@@ -31,7 +35,7 @@ export default function Logo({
       {showText && (
         <div className={clsx('min-w-0 w-full', align === 'center' ? 'flex flex-col items-center' : 'items-start')}>
           <ColorfulBrandName size={iconSize} />
-          {subtitle && (
+          {subtitle && !isBrandSubtitle(subtitle) && (
             <p
               className={clsx(
                 'text-2xs mt-1.5 leading-none truncate max-w-full text-center px-1',
