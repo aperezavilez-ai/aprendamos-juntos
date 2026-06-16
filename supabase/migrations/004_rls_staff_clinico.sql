@@ -1,5 +1,12 @@
 -- Políticas RLS faltantes para módulos clínicos y operativos
 
+-- Requiere columnas de 003 (por si se ejecuta 004 sin 003)
+ALTER TABLE archivos_paciente
+  ADD COLUMN IF NOT EXISTS visible_a_padres BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE archivos_paciente
+  ADD COLUMN IF NOT EXISTS storage_path TEXT;
+
 -- ── Evaluaciones ─────────────────────────────────────────────
 DROP POLICY IF EXISTS "Staff gestiona evaluaciones" ON evaluaciones;
 CREATE POLICY "Staff gestiona evaluaciones"
