@@ -40,7 +40,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <Logo
               href="/portal/citas"
               iconSize="md"
-              align="start"
+              align="center"
               variant="light"
               subtitle="Portal Familias"
             />

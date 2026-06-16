@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import LogoIcon from './LogoIcon'
+import ColorfulBrandName from './ColorfulBrandName'
 import { clsx } from 'clsx'
 
 interface LogoProps {
@@ -26,22 +27,14 @@ export default function Logo({
 }: LogoProps) {
   const content = (
     <>
-      <LogoIcon size={iconSize} className="drop-shadow-sm" />
+      <LogoIcon size={iconSize} />
       {showText && (
-        <div className={clsx('min-w-0', align === 'center' ? 'text-center' : 'text-left')}>
-          <p
-            className={clsx(
-              'font-semibold leading-tight',
-              variant === 'light' ? 'text-white' : 'text-neutral-900',
-              iconSize === 'xl' ? 'text-xl' : iconSize === 'lg' ? 'text-lg' : 'text-sm'
-            )}
-          >
-            Aprendamos Juntos
-          </p>
+        <div className={clsx('min-w-0 w-full', align === 'center' ? 'flex flex-col items-center' : 'items-start')}>
+          <ColorfulBrandName size={iconSize} />
           {subtitle && (
             <p
               className={clsx(
-                'text-2xs mt-0.5 leading-none truncate max-w-[160px]',
+                'text-2xs mt-1.5 leading-none truncate max-w-full text-center px-1',
                 variant === 'light' ? 'text-primary-100' : 'text-neutral-400'
               )}
             >
@@ -54,9 +47,9 @@ export default function Logo({
   )
 
   const wrapperClass = clsx(
-    'group',
+    'group w-full',
     layout === 'stacked'
-      ? clsx('flex flex-col gap-1.5', align === 'start' ? 'items-start' : 'items-center')
+      ? clsx('flex flex-col gap-2', align === 'start' ? 'items-start' : 'items-center')
       : clsx('flex items-center gap-2.5', align === 'start' ? 'justify-start' : 'justify-center'),
     className
   )

@@ -112,8 +112,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-neutral-100">
-        <Logo href="/dashboard" subtitle={clinicaNombre} iconSize="sm" align="start" />
+      <div className="px-4 py-5 border-b border-neutral-100 flex justify-center">
+        <Logo href="/dashboard" subtitle={clinicaNombre} iconSize="md" align="center" />
       </div>
 
       {/* Navegación principal */}
